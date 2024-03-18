@@ -1,25 +1,26 @@
+// ObjectId() method for converting studentId string into an ObjectId for querying database
 const { ObjectId } = require('mongoose').Types;
 const { Student, Course } = require('../models');
 
-// Aggregate function to get the number of students overall
+// TODO: Create an aggregate function to get the number of students overall
 const headCount = async () =>
   Student.aggregate()
-    .count('studentCount')
+    // Your code here
     .then((numberOfStudents) => numberOfStudents);
 
-// Aggregate function for getting the overall grade using $avg
+// Execute the aggregate method on the Student model and calculate the overall grade by using the $avg operator
 const grade = async (studentId) =>
   Student.aggregate([
-    // only include the given student by using $match
-    { $match: { _id: ObjectId(studentId) } },
+    // TODO: Ensure we include only the student who can match the given ObjectId using the $match operator
+    {
+      // Your code here
+    },
     {
       $unwind: '$assignments',
     },
+    // TODO: Group information for the student with the given ObjectId alongside an overall grade calculated using the $avg operator
     {
-      $group: {
-        _id: ObjectId(studentId),
-        overallGrade: { $avg: '$assignments.score' },
-      },
+      // Your code here
     },
   ]);
 
@@ -43,6 +44,7 @@ module.exports = {
   getSingleStudent(req, res) {
     Student.findOne({ _id: req.params.studentId })
       .select('-__v')
+      .lean()
       .then(async (student) =>
         !student
           ? res.status(404).json({ message: 'No student with that ID' })
